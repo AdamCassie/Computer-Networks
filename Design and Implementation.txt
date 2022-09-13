@@ -1,0 +1,38 @@
+For Section 2 of the Text Conferencing Lab, we implemented the following functionalities-
+(1) Inactivity timer (in which clients are logged out from server after being inactive
+    for a pre-defined amount of time.
+(2) Invites (in which a client can invite second client to join a session to which the 
+    first client belongs.
+
+Below is an outline of our design and implementation of each functionality.
+
+
+Inactivity timer-
+
+The server opens a thread which continuously compares the current time with each client's 
+'last active time' (ie. the time at which the client last communicated with the server). 
+This last active time for each client is thus updated everytime the client communicates with
+the server (eg. by issuing a command or sending a message).
+
+When the difference between the current time and a client's last active time exceeds the
+maximum inactivity time (see #define MAX_TIME in server.c) that client is logged out by server.
+
+
+Invites-
+
+If a client belongs to a session, it can invite other logged in clients to that session by
+issuing a command of the form:
+
+/invite <client id> <session id>
+
+(where client id is refers to the client to which the invite should be sent, and session id
+refers to the session for which this client is being invited).
+
+The client which receives the invitation can issue one of the following commands to accept or
+reject the invitation accordingly:
+
+/accept
+/reject
+
+If the invitation is accepted, the server will remove the client from any session to which it 
+already belonged, and add the client to the session for which it was invited.
